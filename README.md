@@ -26,3 +26,6 @@ Brindar al internauta un contenido de apoyo y de calidad, donde el consumidor pu
 - ``sql``
 - ``Express.js``	
 
+
+## Diagrama 
+<img src="diagram/diagram.png">
