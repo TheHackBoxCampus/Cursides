@@ -9,7 +9,7 @@ Este proyecto constara con las siguientes tablas:
 - ``progreso``
 
 ## Objetivo general
-Brindar al internauta un contenido de apoyo y de calidad, donde el consumidor pueda incrementar sus habilidades en el entorno de la programación y sus diferentes tecnologias.
+Brindar al internauta un contenido de apoyo y de calidad sobre desarrollo web, donde el consumidor pueda incrementar sus habilidades en el entorno de la programación y sus diferentes tecnologias. Tendra acceso a cursos, lecciones, categorias, comentarios, lo que que hace que la navegación tenga mas interactividad.
 
 ## Objetivos especificos
 - Crear estructura de la base de datos, que cuente con los siguientes parametros: normalización, actualización, unificación, integridad de los datos
