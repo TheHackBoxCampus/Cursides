@@ -1,0 +1,35 @@
+{
+  "name": "proyecto_cursos_en_linea",
+  "version": "1.0.0",
+  "description": "Este proyecto constara con las siguientes tablas: \r - ``cursos``\r - ``lecciones``\r - ``categorias``\r - ``usuarios``\r - ``progreso``",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "tsc": "",
+    "dev": "nodemon --quiet src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheHackBoxCampus/proyecto_cursos_en_linea.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheHackBoxCampus/proyecto_cursos_en_linea/issues"
+  },
+  "homepage": "https://github.com/TheHackBoxCampus/proyecto_cursos_en_linea#readme",
+  "devDependencies": {
+    "nodemon": "3.0.1",
+    "typescript": "5.1.6"
+  },
+  "dependencies": {
+    "class-transformer": "0.5.1",
+    "dotenv": "16.3.1",
+    "express": "4.18.2",
+    "jose": "4.14.4",
+    "mysql2": "3.5.2",
+    "nanoid": "4.0.2",
+    "reflect-metadata": "0.1.13"
+  }
+}
