@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv"; 
 import app from "./app.js";
-import router from "./routes/router.example.js";
+import router from "./routes/usuario.router.js";
+import cookieParser from "cookie-parser"; 
 
 /**
  @var dotenv -> sirve las variables de entorno
@@ -19,10 +20,11 @@ let $server = JSON.parse(process.env.SERVER);
  * * middleware
  @param express.json() // * Permisos de contenido JSON 
  */
-
 app.use(express.json()); 
+app.use(express.text())
+app.use(cookieParser());
 
-app.use("/template", router);
+app.use("/api_cursides", router);
 
 app.listen($server, () => {
     console.log(`listening http://${$server.hostname}:${$server.port}`); 

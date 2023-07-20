@@ -105,3 +105,6 @@ ALTER TABLE Capitulo
 ADD CONSTRAINT fk_leccion_capitulo
 FOREIGN KEY (id_leccion)
 REFERENCES Leccion(id_leccion);
+
+
+INSERT INTO Usuario (nombre_usuario, email_usuario, contraseña_usuario) VALUES ("miller", "kaled@narino.com", "miller2005");
