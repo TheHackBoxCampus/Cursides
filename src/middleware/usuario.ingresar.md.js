@@ -35,8 +35,8 @@ function validateConsultsPosibles(obj) {
     };
   else {
     let clearData = {};
-    for(let k in obj) {
-      clearData[k] = obj[k].split("'").join("")
+    for (let k in obj) {
+      clearData[k] = obj[k].split("'").join("");
     }
     return clearData;
   }
@@ -61,8 +61,4 @@ const mdIngresarUsuario = (req, res, next) => {
       })();
 };
 
-export {
-    mdIngresarUsuario,
-    validateConsultsPosibles,
-    validateFieldCharacters
-};
+export { mdIngresarUsuario, validateConsultsPosibles, validateFieldCharacters };

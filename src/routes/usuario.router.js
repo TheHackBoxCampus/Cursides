@@ -75,11 +75,8 @@ router.get("/informacion_cursos", validateJWTIngreso, async (req, res) => {
           JOIN inscripcion as i ON i.id_usuario = ?
           JOIN curso AS c ON c.id_curso = i.id_curso
        `;
-    dbcx.query(
-      searchCurses,
-      [req.user.payload.id],
-       (err, results) =>
-      err ? res.send(err) : res.send({user: req.user.payload.id, in:results})
+    dbcx.query(searchCurses, [req.user.payload.id], (err, results) =>
+      err ? res.send(err) : res.send({ user: req.user.payload.id, in: results })
     );
   }
 });
@@ -113,12 +110,10 @@ router.post(
               exist = true;
             }
             if (exist) {
-              res
-                .status(500)
-                .send({
-                  status: 500,
-                  message: "El usuario ya esta registrado en ese curso",
-                });
+              res.status(500).send({
+                status: 500,
+                message: "El usuario ya esta registrado en ese curso",
+              });
             } else {
               dbcx.query(
                 createdInscriptionForCurse,
