@@ -14,14 +14,14 @@ function validateFieldCharacters(obj) {
   return sanitizedData;
 }
 
-function validateConsultsPosibles(obj) {
+function validateConsultsPosibles(obj, argument1, argument2) {
   let options = ["DELETE", "SELECT", "INSERT", "UPDATE"];
   let denied = false;
 
   for (let x = 0; x < options.length; x++) {
     if (
-      obj.usuario.toLowerCase().includes(options[x].toLowerCase()) ||
-      obj.clave.toLowerCase().includes(options[x].toLowerCase())
+      obj[argument1].toLowerCase().includes(options[x].toLowerCase()) ||
+      obj[argument2].toLowerCase().includes(options[x].toLowerCase())
     ) {
       denied = true;
     }
@@ -45,7 +45,7 @@ function validateConsultsPosibles(obj) {
 const mdIngresarUsuario = (req, res, next) => {
   let data = req.params;
   let sanitizedUserData = validateFieldCharacters(data);
-  let verifySecurity = validateConsultsPosibles(sanitizedUserData);
+  let verifySecurity = validateConsultsPosibles(sanitizedUserData, "usuario", "clave");
   verifySecurity.usuario == undefined
     ? res.send(verifySecurity)
     : (function () {

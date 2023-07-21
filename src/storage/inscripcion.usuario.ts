@@ -6,7 +6,7 @@ class inscripcion {
     if (typeof value != "number" || isNaN(value))
       throw { status: 500, message: "Parametros Incorrectos!" };
     return value;
-  })
+  }, {toClassOnly: true})
   icr: number;
   constructor(icr: number) {
     this.icr = icr;

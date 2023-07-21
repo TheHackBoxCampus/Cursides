@@ -1,11 +1,14 @@
 import { Router } from "express";
+import { customAlphabet } from "nanoid";
 import dotenv from "dotenv";
 import argon2 from "argon2";
 import { mdIngresarUsuario } from "../middleware/usuario.ingresar.md.js";
 import validateJWTIngreso from "../middleware/usuario.jwtingresar.js";
 import mdInscripcion from "../middleware/inscripcion.usuario.js";
+import mdRegistroUsuario from "../middleware/registro.usuario.js";
 import dbcx from "../services/database.js";
 import { SignJWT } from "jose";
+
 /**
  @var dotenv -> sirve las variables de entorno
  */
@@ -62,12 +65,72 @@ router.post(
 );
 
 /**
+ @param /registro/:usuario/:nueva_clave/:correo
+ * * Endpoint para el registro de usuarios
+ */
+
+router.post(
+  "/registro/:usuario/:nueva_clave/:correo",
+  mdRegistroUsuario,
+  (req, res) => {
+    let data = req.params;
+    let searchUser = /* sql */ `SELECT u.nombre_usuario AS n FROM Usuario AS u`;
+    dbcx.query(searchUser, async (err, results) => {
+      if (err) res.send(err);
+      else {
+        let existUser = false;
+        for (let p = 0; p < results.length; p++) {
+          if (data.usr == results[p].n) existUser = true;
+        }
+        if (existUser)
+          res
+            .status(500)
+            .send({ status: 500, message: "El nombre ya esta en uso." });
+        else {
+          let generateIndexRandom = customAlphabet("0123456789", 5);
+          let indexRandom = generateIndexRandom();
+          let pswhashed = await argon2.hash(data.cl);
+          let createUser = /* sql */ `INSERT INTO Usuario (id_usuario, nombre_usuario, email_usuario, contraseña_usuario) VALUES (?,?,?,?)`;
+          dbcx.query(
+            createUser,
+            [indexRandom, data.usr, data.em, pswhashed],
+            async (err) => {
+              if (err) res.send(err);
+              else {
+                let encoder = new TextEncoder();
+                let jwtConstruct = new SignJWT({ id: indexRandom });
+                let jwt = await jwtConstruct
+                  .setProtectedHeader({ alg: "HS256", typ: "JWT" })
+                  .setIssuedAt()
+                  .setExpirationTime("10s")
+                  .sign(encoder.encode(process.env.KEY));
+                res.cookie(`auth`, jwt, {
+                  httpOnly: true, // ! cookie solo de lectura, para el cliente
+                });
+                res.send({
+                  status: 200,
+                  message:
+                    "El registro fue exitoso, tendra acceso a algunas secciones.",
+                });
+              }
+            }
+          );
+        }
+      }
+    });
+  }
+);
+
+/**
  @param /informacion_cursos
  * * Endpoint donde el usuario consulte la informacion de los cursos donde se ha inscrito
 */
 
 router.get("/informacion_cursos", validateJWTIngreso, async (req, res) => {
   if (req.user) {
+    /** 
+     * todo: Corregir consulta porque no es personalizada.
+     */
     let searchCurses = /* sql */ `
           SELECT u.nombre_usuario as Nombre,
 	               c.nombre_curso as Curso
