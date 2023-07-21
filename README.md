@@ -26,6 +26,12 @@ Brindar al internauta un contenido de apoyo y de calidad sobre desarrollo web, d
 - ``sql``
 - ``Express.js``	
 
+## Entregas proximas 
+### Viernes 7/21/2023
+- Endpoint Registro
+- Endpoint Ingreso
+- Endpoint Informacion cursos
+- Inscripcion de usuario
 
 ## Diagrama 
 <img src="diagram/diagram.png">
