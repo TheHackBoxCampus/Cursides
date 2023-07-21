@@ -61,4 +61,8 @@ const mdIngresarUsuario = (req, res, next) => {
       })();
 };
 
-export default mdIngresarUsuario;
+export {
+    mdIngresarUsuario,
+    validateConsultsPosibles,
+    validateFieldCharacters
+};
