@@ -36,21 +36,28 @@ router.post(
             String(data.ps)
           );
           if (compare) {
-            let encoder = new TextEncoder();
-            let jwtConstruct = new SignJWT({ id: results[0].i });
-            let jwt = await jwtConstruct
-              .setProtectedHeader({ alg: "HS256", typ: "JWT" })
-              .setIssuedAt()
-              .setExpirationTime("10m")
-              .sign(encoder.encode(process.env.KEY));
-            res.cookie(`auth`, jwt, {
-              httpOnly: true, // ! cookie solo de lectura, para el cliente
-            });
-            res.send({
-              status: 200,
-              message:
-                "Autenticacion exitosa!, la sesion estara activa durante algunos minutos.",
-            });
+            if (req.cookies.auth) {
+              res.status(401).send({
+                status: 401,
+                message: "El usuario ya esta autorizado!.",
+              });
+            } else {
+              let encoder = new TextEncoder();
+              let jwtConstruct = new SignJWT({ id: results[0].i });
+              let jwt = await jwtConstruct
+                .setProtectedHeader({ alg: "HS256", typ: "JWT" })
+                .setIssuedAt()
+                .setExpirationTime("10m")
+                .sign(encoder.encode(process.env.KEY));
+              res.cookie(`auth`, jwt, {
+                httpOnly: true, // ! cookie solo de lectura, para el cliente
+              });
+              res.send({
+                status: 200,
+                message:
+                  "Autenticacion exitosa!, la sesion estara activa durante algunos minutos.",
+              });
+            }
           } else {
             res.send({ status: 401, message: "Contraseña incorrecta!" });
           }
@@ -102,7 +109,7 @@ router.post(
                 let jwt = await jwtConstruct
                   .setProtectedHeader({ alg: "HS256", typ: "JWT" })
                   .setIssuedAt()
-                  .setExpirationTime("10s")
+                  .setExpirationTime("10m")
                   .sign(encoder.encode(process.env.KEY));
                 res.cookie(`auth`, jwt, {
                   httpOnly: true, // ! cookie solo de lectura, para el cliente
@@ -110,7 +117,7 @@ router.post(
                 res.send({
                   status: 200,
                   message:
-                    "El registro fue exitoso, tendra acceso a algunas secciones.",
+                    "El registro fue exitoso, Ahora puede utilizar las otras secciones.",
                 });
               }
             }
@@ -128,15 +135,13 @@ router.post(
 
 router.get("/informacion_cursos", validateJWTIngreso, async (req, res) => {
   if (req.user) {
-    /** 
-     * todo: Corregir consulta porque no es personalizada.
-     */
     let searchCurses = /* sql */ `
           SELECT u.nombre_usuario as Nombre,
 	               c.nombre_curso as Curso
           FROM Usuario AS u
-          JOIN inscripcion as i ON i.id_usuario = ?
+          JOIN inscripcion as i ON i.id_usuario = u.id_usuario
           JOIN curso AS c ON c.id_curso = i.id_curso
+          WHERE u.id_usuario = ?
        `;
     dbcx.query(searchCurses, [req.user.payload.id], (err, results) =>
       err ? res.send(err) : res.send({ user: req.user.payload.id, in: results })
@@ -146,7 +151,7 @@ router.get("/informacion_cursos", validateJWTIngreso, async (req, res) => {
 
 /**
  @param /inscripcion/:id_curso
- * * Endpoint donde el usuario se inscribe a un curso.
+ * * Inscripciones para cada curso
 */
 
 router.post(
@@ -172,31 +177,87 @@ router.post(
             ) {
               exist = true;
             }
-            if (exist) {
-              res.status(500).send({
-                status: 500,
-                message: "El usuario ya esta registrado en ese curso",
-              });
-            } else {
-              dbcx.query(
-                createdInscriptionForCurse,
-                [req.user.payload.id, data.icr],
-                (err) => {
-                  err
-                    ? res.send(err)
-                    : res.status(200).send({
-                        status: 200,
-                        message:
-                          "El usuario se ha escrito correctamente al curso, puede ver sus cursos en la seccion de informacion_cursos",
-                      });
+          }
+          if (exist) {
+            res.status(500).send({
+              status: 500,
+              message: "El usuario ya esta registrado en ese curso",
+            });
+          } else {
+            dbcx.query(
+              createdInscriptionForCurse,
+              [req.user.payload.id, data.icr],
+              (err) => {
+                if (err) res.send(err);
+                else {
+                  /**
+                   * * Progreso inicial
+                   */
+
+                  let lastIdInscription = /* sql */ `
+                      SELECT i.id_inscripcion as isc
+                      FROM inscripcion as i 
+                      ORDER BY isc DESC
+                      LIMIT 1;
+                    `;
+                  dbcx.query(lastIdInscription, (err, results) => {
+                    if (err) res.send(err);
+                    else {
+                      let insertProgress = /* sql */ `
+                          INSERT INTO progreso (puntuacion, id_inscripcion, id_leccion) 
+                          VALUES (?, ?, ?);
+                          `;
+                      dbcx.query(
+                        insertProgress,
+                        [0, results[0].isc, 1],
+                        (err) => {
+                          if (err) res.send(err);
+                          else {
+                            res.status(200).send({
+                              status: 200,
+                              message:
+                                "El usuario se ha escrito correctamente al curso, puede ver sus cursos en la seccion de informacion_cursos",
+                            });
+                          }
+                        }
+                      );
+                    }
+                  });
                 }
-              );
-            }
+              }
+            );
           }
         }
       });
     }
   }
 );
+
+/**
+ @param /lecciones_capitulo
+ * * Mostrar los capítulos de un curso y el número de lecciones en cada capítulo
+*/
+
+router.get("/lecciones_capitulo", validateJWTIngreso, (req, res) => {
+  if (req.user) {
+    let searchChaptersAndLessons = /* sql */ `
+        SELECT cr.nombre_curso as curso,
+               c.nombre_capitulo AS capitulo,
+               COUNT(l.id_capitulo) AS lecciones_cantidad
+        FROM capitulo AS c
+        LEFT JOIN leccion as l ON c.id_capitulo = l.id_capitulo
+        LEFT JOIN curso as cr ON cr.id_curso = l.id_curso
+        GROUP BY capitulo
+        `;
+
+    dbcx.query(searchChaptersAndLessons, (err, results) => {
+      if (err) res.send(err);
+      else {
+        res.status(200).send(results);
+      }
+    });
+  }
+});
+
 
 export default router;

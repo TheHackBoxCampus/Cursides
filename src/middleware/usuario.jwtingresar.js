@@ -12,6 +12,7 @@ const validateJWTIngreso = async (req, res, next) => {
     req.user = jwtaccess;
     next();
   } catch (err) {
+    res.clearCookie("auth")
     res.send({ status: 401, message: "Token invalido" });
   }
 };
