@@ -285,4 +285,27 @@ router.get("/usuarios_inscritos", validateJWTIngreso, (req, res) => {
   }
 });
 
+/**
+ @param /docentes
+ * * Listar los docentes y su cantidad de especializaciones.
+*/
+
+router.get("/docentes", validateJWTIngreso, (req, res) => {
+  if (req.user) {
+    let searchTeacher = /* sql */ `
+       SELECT d.nombre_docente as Docente,
+              e.nombre_especializacion as Especializacion 
+       FROM docente as d
+       LEFT JOIN especializacion as e ON d.id_especializacion = e.id_especializacion
+       `;
+
+    dbcx.query(searchTeacher, (err, results) => {
+      if (err) res.send(err);
+      else {
+        res.status(200).send(results);
+      }
+    });
+  }
+});
+
 export default router;
