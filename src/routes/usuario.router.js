@@ -308,4 +308,32 @@ router.get("/docentes", validateJWTIngreso, (req, res) => {
   }
 });
 
+/**
+ @param /lecciones_capitulo
+ * * Obtener el progreso de un usuario en un curso (El estado de las lecciones):.
+*/
+
+router.get("/estado_lecciones", validateJWTIngreso, (req, res) => {
+  if(req.user){
+      let searchProgress = /* sql */ `
+      SELECT u.nombre_usuario as nombre, 
+             COUNT(l.id_leccion) as cantidad,
+             e.nombre_estado as estado
+      FROM progreso as p
+      JOIN inscripcion as i ON i.id_inscripcion = p.id_inscripcion
+      JOIN usuario as u ON u.id_usuario = i.id_usuario
+      JOIN leccion as l ON p.id_leccion = l.id_leccion 
+      JOIN estado_leccion as e ON e.id_estado = l.id_estado_leccion
+      WHERE u.id_usuario = ?
+      GROUP BY nombre
+      `;
+
+      dbcx.query(searchProgress, [req.user.payload.id], (err, results) => {
+        if (err) res.send(err);
+        else {
+          res.status(200).send(results);
+        }
+      })
+  }
+})
 export default router;
