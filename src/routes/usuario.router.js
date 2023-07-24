@@ -259,5 +259,30 @@ router.get("/lecciones_capitulo", validateJWTIngreso, (req, res) => {
   }
 });
 
+/**
+ @param /usuarios_inscritos
+ * * Mostrar la cantidad de usuarios inscritos en cada categoría de cursos.
+*/
+
+router.get("/usuarios_inscritos", validateJWTIngreso, (req, res) => {
+  if (req.user) {
+    let usersInCurse = /* sql */ `
+     SELECT c.nombre_categoria as categoria,
+	          COUNT(u.id_usuario) as Cantidad		
+     FROM inscripcion as i
+     LEFT JOIN curso as crs ON i.id_curso = crs.id_curso
+     LEFT JOIN categoria as c ON c.id_categoria = crs.id_categoria
+     RIGHT JOIN usuario as u ON u.id_usuario = i.id_usuario 
+     GROUP BY categoria 
+     `;
+
+    dbcx.query(usersInCurse, (err, results) => {
+      if (err) res.send(err);
+      else {
+        res.status(200).send(results);
+      }
+    });
+  }
+});
 
 export default router;
