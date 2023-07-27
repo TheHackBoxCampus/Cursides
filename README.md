@@ -151,9 +151,20 @@ Para la conexion se utilizan variables de entorno para administrar credenciales
 
 Para su uso se configura el archivo .env
 
-```markdown
-config={...data}
+```JSON
+SERVER={"hostname": "...", "port": "..."}
+
+CONNECT={"host": "...", "user": "...", "password": "#", "database": "..."}
+
+KEY="secret_pass"
 ```
+- Para que los puntos de acceso no tengan errores y pueda ejecutar las operaciones de forma correcta, debes quitarle el ``.example`` al ``.env`` es decir el archivo debe quedar en la raiz ``/`` de tu proyecto con el nombre ``.env``.
+
+```t
+.env.example => X
+.env => ✔ 
+```
+
 - En el archivo database importas la libreria `` dotevn `` para el reconocimiento de las variables definidas con anterioridad
 
 - importas mysql para efectuar la conexión
@@ -178,8 +189,103 @@ connection.connect((err) =>  err ? console.log(err) : console.log("connect!!!!!"
 export default connection; 
 ```
 
-## Enrutado con Router / Express 
+## Importar base de datos MYSQL
+Para el funcionamiento de los puntos de acceso es necesario tener la base de datos, con las tablas y registros:
 
+Dependiendo de tu sistema operativo deberas ejecutar metodos diferentes, Explicación de cada metodo para Windows y linux: 
+- ``Linux``
+
+```bash
+mysql -h "host" -u 'user' -p 
+```
+Teniendo en cuenta el codigo proporcionado, deberas contar con mysql y el servidor de apache configurado para el procedimiento de importación de la base de datos. 
+
+### Consola de MYSQL 
+Un ejemplo de como ingresar en caso de que quiera autenticarte con el usuario ROOT de tu entorno
+
+<img src="https://parzibyte.me/blog/wp-content/uploads/2019/06/MySQL-como-root-en-Linux.png">
+
+- En la consola crea la base de datos 
+
+```sql
+  CREATE DATABASE cursideslearn
+```
+
+- Ya creada la base de datos, puedes importar el archivo sql que esta en la ruta:
+
+```
+  src/services/schema.sql
+```
+- contiene todos los comandos ``DDL, DQL, DML`` para la correcta creacion de la base de datos.
+
+Para importarla puedes utilizar el ``phpmyadmin`` o lo puedes digitar en la consola de mysql.
+
+Para ejecutar en la ``consola``: 
+- Usar la base de datos
+```sql
+USE cursideslearn
+``` 
+- Ingresas los comandos de manera consecutiva
+```sql
+CREATE TABLE usuario (...); 
+```
+Siempre debes finalizar las consultas con un ``;`` de lo contrario recibiras errores de sintaxis. 
+
+Para ingresar al ``phpmyadmin`` ingresas a la ruta en tu navegador 
+
+```t
+http://127.0.0.1/myphpmyadmin
+```
+
+Recibiras una vista como esta: 
+
+<img src="https://cafedixital.com/wp-content/uploads/2014/11/15.png">
+
+Ingresas:
+- Usuario
+- contraseña
+
+Importas el contenido de la BD  
+
+<img src="https://help.wnpower.com/hc/article_attachments/360056945852/mceclip0.png
+">
+
+- ``Windows``
+
+Para windows puedes descargar programas que te permitiran tener una gestion de la base de datos, tener el servidor de apache y el lenguaje PHP
+
+En este caso estaremos utilizando XAMPP:
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Xampp_logo.svg/2560px-Xampp_logo.svg.png">
+
+### Concepto
+Xampp es un servidor web local multiplataforma que permite la creación y prueba de páginas web u otros elementos de programación. Sin embargo, Xampp integra una serie de herramientas que potencian y facilitan la experiencia al desarrollador.
+
+Es decir, Xampp en sí mismo no es un programa, sino un paquete de programas o software que contiene herramientas de gestión de base de datos.
+
+
+### Instalacion 
+- instalar ``.exe`` desde la pagina oficial
+```
+https://www.apachefriends.org/es/download.html
+``` 
+- Una vez instalado tendras un panel como el siguiente: 
+
+<img src="https://www.nettix.com.pe/wp-content/uploads/2020/05/explorer.png">
+
+- Activas el apache y el mysql. 
+
+- Verficas el funcionamiento accediendo a la ruta
+```
+http://127.0.0.1 || localhost
+```
+Resultado:
+
+<img src="https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/media/image/2016/07/182150-que-es-localhost-ip-127001-que-utiliza.jpg?tf=3840x">
+
+Si al finalizar tienes ese dashboard como resultado quiere decir que lo hiciste todo bien, para importar la base datos puedes seguir los pasos que se dieron en el apartado de linux en el uso de ``phpmyadmin``
+
+## Enrutado con Router / Express 
 ### Consultas HTTP en Router / Express
 
 Para ejecutar esta consultas:
@@ -317,6 +423,11 @@ let randomID = nanoid();
 console.log(randomID) // "V1StGXR8_Z5jdHi6B-myT"
 ```
 
+## Cookie-parser
+Es un middleware popular en Node.js que se utiliza para analizar y manejar 
+cookies en las solicitudes HTTP. Proporciona una forma conveniente de leer y 
+manipular las cookies enviadas por el cliente
+
 ## Mas información de las librerias utilizadas
 - class validator
 [![class-validator](https://github.com/typestack/class-validator/workflows/CI/badge.svg)](https://github.com/typestack/class-validator.git)
@@ -331,6 +442,9 @@ console.log(randomID) // "V1StGXR8_Z5jdHi6B-myT"
 [![nanoid](https://github.com/typestack/class-validator/workflows/CI/badge.svg)](https://github.com/ai/nanoid.git)
 
 - argon2 [![argon2](https://camo.githubusercontent.com/87c66b56461ab57e8c04a75255ee1c14fe9cd0a7269adcbbf8079cce7e2c5d17/68747470733a2f2f696d672e736869656c64732e696f2f6f70656e636f6c6c6563746976652f616c6c2f6e6f64652d6172676f6e322e7376673f7374796c653d666c61742d737175617265)](https://www.npmjs.com/package/argon2)
+
+- cookie-parser
+[![cookie-parser](https://camo.githubusercontent.com/87c66b56461ab57e8c04a75255ee1c14fe9cd0a7269adcbbf8079cce7e2c5d17/68747470733a2f2f696d672e736869656c64732e696f2f6f70656e636f6c6c6563746976652f616c6c2f6e6f64652d6172676f6e322e7376673f7374796c653d666c61742d737175617265)](https://github.com/expressjs/cookie-parser)
 
 
 ## Funcionamiento de la aplicación 
@@ -451,3 +565,7 @@ GET => /lecciones_capitulo
 ```
 Obtiene el progreso de un usuario en un curso (el estado de las lecciones)
 
+## Contacto
+Nombre: Miller Kaled Nariño Ibarra
+
+Email: kalednarino@gmail.com
