@@ -285,6 +285,10 @@ Resultado:
 
 Si al finalizar tienes ese dashboard como resultado quiere decir que lo hiciste todo bien, para importar la base datos puedes seguir los pasos que se dieron en el apartado de linux en el uso de ``phpmyadmin``
 
+```
+NOTA: En caso de que el archivo schema.sql no te importe o te mande errores, ejecuta en el apartado de sql en el phpmyadmin consulta por consulta para llenar la base de datos.
+```
+
 ## Enrutado con Router / Express 
 ### Consultas HTTP en Router / Express
 
