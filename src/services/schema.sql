@@ -1,26 +1,6 @@
--- phpMyAdmin SQL Dump
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 24-07-2023 a las 04:54:35
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.2.0
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Base de datos: `cursideslearn`
 --
-
 -- --------------------------------------------------------
 
 --
@@ -31,7 +11,7 @@ CREATE TABLE `capitulo` (
   `id_capitulo` int(11) NOT NULL,
   `nombre_capitulo` varchar(50) NOT NULL,
   `duracion_capitulo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `capitulo`
@@ -50,7 +30,7 @@ INSERT INTO `capitulo` (`id_capitulo`, `nombre_capitulo`, `duracion_capitulo`) V
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
   `nombre_categoria` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `categoria`
@@ -76,7 +56,7 @@ CREATE TABLE `curso` (
   `id_categoria` int(11) DEFAULT NULL,
   `id_docente` int(11) DEFAULT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `curso`
@@ -95,7 +75,7 @@ CREATE TABLE `docente` (
   `id_docente` int(11) NOT NULL,
   `nombre_docente` varchar(50) NOT NULL,
   `id_especializacion` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `docente`
@@ -115,7 +95,7 @@ INSERT INTO `docente` (`id_docente`, `nombre_docente`, `id_especializacion`) VAL
 CREATE TABLE `especializacion` (
   `id_especializacion` int(11) NOT NULL,
   `nombre_especializacion` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `especializacion`
@@ -135,7 +115,7 @@ INSERT INTO `especializacion` (`id_especializacion`, `nombre_especializacion`) V
 CREATE TABLE `estado_leccion` (
   `id_estado` int(11) NOT NULL,
   `nombre_estado` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `estado_leccion`
@@ -157,7 +137,7 @@ CREATE TABLE `inscripcion` (
   `id_usuario` int(11) DEFAULT NULL,
   `id_curso` int(11) DEFAULT NULL,
   `inscrito_en` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `inscripcion`
@@ -182,7 +162,7 @@ CREATE TABLE `leccion` (
   `id_estado_leccion` int(11) DEFAULT NULL,
   `id_curso` int(11) DEFAULT NULL,
   `id_capitulo` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `leccion`
@@ -206,7 +186,7 @@ CREATE TABLE `progreso` (
   `fecha_ultimo_acceso` date DEFAULT NULL,
   `id_inscripcion` int(11) DEFAULT NULL,
   `id_leccion` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+); 
 
 --
 -- Volcado de datos para la tabla `progreso`
@@ -227,7 +207,7 @@ CREATE TABLE `usuario` (
   `email_usuario` varchar(50) NOT NULL,
   `contraseña_usuario` varchar(100) NOT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -417,8 +397,3 @@ ALTER TABLE `leccion`
 ALTER TABLE `progreso`
   ADD CONSTRAINT `fk_inscripcion_progreso` FOREIGN KEY (`id_inscripcion`) REFERENCES `inscripcion` (`id_inscripcion`),
   ADD CONSTRAINT `fk_leccion_progreso` FOREIGN KEY (`id_leccion`) REFERENCES `leccion` (`id_leccion`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
