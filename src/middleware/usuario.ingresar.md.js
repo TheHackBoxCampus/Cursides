@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { plainToClass } from "class-transformer";
-import ingresoUsuario from "../compiled/usuario.ingresar.js";
+import ingresoUsuario from "../controller/usuario.ingresar.js"
 import dbcx from "../services/database.js";
 
 function validateFieldCharacters(obj) {

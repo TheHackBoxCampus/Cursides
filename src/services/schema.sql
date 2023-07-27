@@ -1,9 +1,6 @@
--- Active: 1690155495716@@127.0.0.1@3306
---
--- Base de datos: `cursideslearn`
---
--- --------------------------------------------------------
+CREATE DATABASE cursideslearn;
 
+USE cursideslearn;
 --
 -- Estructura de tabla para la tabla `capitulo`
 --
@@ -154,7 +151,7 @@ CREATE TABLE `leccion` (
 CREATE TABLE `progreso` (
   `id_progreso` int(11) NOT NULL,
   `puntuacion` int(11) DEFAULT NULL,
-  `fecha_inicio` date DEFAULT current_timestamp(),
+  `fecha_inicio` date DEFAULT NULL,
   `fecha_ultimo_acceso` date DEFAULT NULL,
   `id_inscripcion` int(11) DEFAULT NULL,
   `id_leccion` int(11) DEFAULT NULL
@@ -320,8 +317,8 @@ ALTER TABLE `progreso`
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
-ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68718;
+ALTER TABLE usuario
+  MODIFY id_usuario int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas

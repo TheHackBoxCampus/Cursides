@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { validateFieldCharacters } from "./usuario.ingresar.md.js";
 import { plainToClass } from "class-transformer";
-import inscripcion from "../compiled/inscripcion.usuario.js";
+import inscripcion from "../controller/inscripcion.usuario.js";
 
 const mdInscripcion = (req, res, next) => {
   let data = req.params;

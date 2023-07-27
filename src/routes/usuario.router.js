@@ -20,12 +20,18 @@ dotenv.config();
  @param /ingresar/:usuario/:clave
  * * Endpoint donde el usuario pueda ingresar a su cuenta y crear una sesión.
 */
+
+router.get("/s", (req, res) => {
+  res.clearCookie("auth"); 
+  res.send();
+})
+
 router.post(
   "/ingresar/:usuario/:clave",
   mdIngresarUsuario,
   async (req, res) => {
     let data = req.params;
-    let searchUser = /* sql */ `SELECT u.id_usuario as i, u.contraseña_usuario as p FROM Usuario AS u WHERE u.nombre_usuario = ?`;
+    let searchUser = /* sql */ `SELECT u.id_usuario as i, u.contraseña_usuario as p FROM usuario AS u WHERE u.nombre_usuario = ?`;
     dbcx.query(searchUser, [data.us], async (err, results) => {
       if (err) {
         res.send(err);
@@ -36,12 +42,6 @@ router.post(
             String(data.ps)
           );
           if (compare) {
-            if (req.cookies.auth) {
-              res.status(401).send({
-                status: 401,
-                message: "El usuario ya esta autorizado!.",
-              });
-            } else {
               let encoder = new TextEncoder();
               let jwtConstruct = new SignJWT({ id: results[0].i });
               let jwt = await jwtConstruct
@@ -57,7 +57,6 @@ router.post(
                 message:
                   "Autenticacion exitosa!, la sesion estara activa durante algunos minutos.",
               });
-            }
           } else {
             res.send({ status: 401, message: "Contraseña incorrecta!" });
           }
@@ -81,7 +80,7 @@ router.post(
   mdRegistroUsuario,
   (req, res) => {
     let data = req.params;
-    let searchUser = /* sql */ `SELECT u.nombre_usuario AS n FROM Usuario AS u`;
+    let searchUser = /* sql */ `SELECT u.nombre_usuario AS n FROM usuario AS u`;
     dbcx.query(searchUser, async (err, results) => {
       if (err) res.send(err);
       else {
@@ -97,7 +96,7 @@ router.post(
           let generateIndexRandom = customAlphabet("0123456789", 5);
           let indexRandom = generateIndexRandom();
           let pswhashed = await argon2.hash(data.cl);
-          let createUser = /* sql */ `INSERT INTO Usuario (id_usuario, nombre_usuario, email_usuario, contraseña_usuario) VALUES (?,?,?,?)`;
+          let createUser = /* sql */ `INSERT INTO usuario (id_usuario, nombre_usuario, email_usuario, contraseña_usuario) VALUES (?,?,?,?)`;
           dbcx.query(
             createUser,
             [indexRandom, data.usr, data.em, pswhashed],
@@ -138,7 +137,7 @@ router.get("/informacion_cursos", validateJWTIngreso, async (req, res) => {
     let searchCurses = /* sql */ `
           SELECT u.nombre_usuario as Nombre,
 	               c.nombre_curso as Curso
-          FROM Usuario AS u
+          FROM usuario AS u
           JOIN inscripcion as i ON i.id_usuario = u.id_usuario
           JOIN curso AS c ON c.id_curso = i.id_curso
           WHERE u.id_usuario = ?

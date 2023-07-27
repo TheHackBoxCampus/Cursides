@@ -3,7 +3,7 @@ import {
   validateFieldCharacters,
   validateConsultsPosibles,
 } from "./usuario.ingresar.md.js";
-import registro from "../compiled/registro.usuario.js"
+import registro from "../controller/registro.usuario.js"
 import { plainToClass } from "class-transformer";
 
 const mdRegistroUsuario = (req, res, next) => {
