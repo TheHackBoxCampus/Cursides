@@ -82,7 +82,7 @@ npm install
       "target": "es6",
       "module": "ES6",
       "moduleResolution": "node",
-      "outDir": "./controller",
+      "outDir": "src/controller",
       "esModuleInterop": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true
