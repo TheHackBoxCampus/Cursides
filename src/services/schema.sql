@@ -1,6 +1,30 @@
-CREATE DATABASE cursideslearn;
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 28-07-2023 a las 04:57:53
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
 
-USE cursideslearn;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `cursideslearn`
+--
+CREATE DATABASE cursideslearn; 
+
+USE cursideslearn; 
+-- --------------------------------------------------------
+
 --
 -- Estructura de tabla para la tabla `capitulo`
 --
@@ -9,11 +33,15 @@ CREATE TABLE `capitulo` (
   `id_capitulo` int(11) NOT NULL,
   `nombre_capitulo` varchar(50) NOT NULL,
   `duracion_capitulo` int(11) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `capitulo`
 --
+
+INSERT INTO `capitulo` (`id_capitulo`, `nombre_capitulo`, `duracion_capitulo`) VALUES
+(1, 'Formulario', 1),
+(2, 'Metadatos', 1);
 
 -- --------------------------------------------------------
 
@@ -24,13 +52,17 @@ CREATE TABLE `capitulo` (
 CREATE TABLE `categoria` (
   `id_categoria` int(11) NOT NULL,
   `nombre_categoria` varchar(50) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `categoria`
 --
 
-
+INSERT INTO `categoria` (`id_categoria`, `nombre_categoria`) VALUES
+(1, 'Diseño de Bases de datos'),
+(3, 'UX|UI'),
+(4, 'infraestructura'),
+(5, 'Ciberseguridad');
 
 -- --------------------------------------------------------
 
@@ -46,13 +78,14 @@ CREATE TABLE `curso` (
   `id_categoria` int(11) DEFAULT NULL,
   `id_docente` int(11) DEFAULT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `curso`
 --
 
-
+INSERT INTO `curso` (`id_curso`, `nombre_curso`, `descripcion`, `n_horas`, `id_categoria`, `id_docente`, `creado_en`) VALUES
+(1, 'HTML', 'Aprende a crear paginas web, Estudia HTML!', 10, 3, 2, '2023-07-21 00:15:33');
 
 -- --------------------------------------------------------
 
@@ -64,13 +97,16 @@ CREATE TABLE `docente` (
   `id_docente` int(11) NOT NULL,
   `nombre_docente` varchar(50) NOT NULL,
   `id_especializacion` int(11) DEFAULT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `docente`
 --
 
-
+INSERT INTO `docente` (`id_docente`, `nombre_docente`, `id_especializacion`) VALUES
+(1, 'Jolhver', 2),
+(2, 'Miguel', 1),
+(3, 'Bermen', 2);
 
 -- --------------------------------------------------------
 
@@ -81,12 +117,16 @@ CREATE TABLE `docente` (
 CREATE TABLE `especializacion` (
   `id_especializacion` int(11) NOT NULL,
   `nombre_especializacion` varchar(50) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `especializacion`
 --
 
+INSERT INTO `especializacion` (`id_especializacion`, `nombre_especializacion`) VALUES
+(1, 'Frontend'),
+(2, 'Backend'),
+(3, 'DevOps');
 
 -- --------------------------------------------------------
 
@@ -97,11 +137,16 @@ CREATE TABLE `especializacion` (
 CREATE TABLE `estado_leccion` (
   `id_estado` int(11) NOT NULL,
   `nombre_estado` varchar(50) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `estado_leccion`
 --
+
+INSERT INTO `estado_leccion` (`id_estado`, `nombre_estado`) VALUES
+(1, 'Completada'),
+(2, 'Incompleta'),
+(3, 'No iniciada');
 
 -- --------------------------------------------------------
 
@@ -114,11 +159,16 @@ CREATE TABLE `inscripcion` (
   `id_usuario` int(11) DEFAULT NULL,
   `id_curso` int(11) DEFAULT NULL,
   `inscrito_en` timestamp NOT NULL DEFAULT current_timestamp()
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `inscripcion`
 --
+
+INSERT INTO `inscripcion` (`id_inscripcion`, `id_usuario`, `id_curso`, `inscrito_en`) VALUES
+(1, 7, 1, '2023-07-21 01:27:50'),
+(2, 55903, 1, '2023-07-21 04:22:55'),
+(4, 54731, 1, '2023-07-24 01:49:36');
 
 -- --------------------------------------------------------
 
@@ -134,13 +184,16 @@ CREATE TABLE `leccion` (
   `id_estado_leccion` int(11) DEFAULT NULL,
   `id_curso` int(11) DEFAULT NULL,
   `id_capitulo` int(11) DEFAULT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `leccion`
 --
 
-
+INSERT INTO `leccion` (`id_leccion`, `nombre_leccion`, `descripcion`, `duracion`, `id_estado_leccion`, `id_curso`, `id_capitulo`) VALUES
+(1, 'Inputs', 'Creacion de entradas de texto y sus caracteristicas', 40, 2, 1, 1),
+(2, 'Meta', 'Diferentes tipos y utilidades', 30, 2, 1, 2),
+(3, 'Redireccionamiento', 'Enviar formularios por los distintos metodos HTTP', 40, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -151,15 +204,19 @@ CREATE TABLE `leccion` (
 CREATE TABLE `progreso` (
   `id_progreso` int(11) NOT NULL,
   `puntuacion` int(11) DEFAULT NULL,
-  `fecha_inicio` date DEFAULT NULL,
+  `fecha_inicio` date DEFAULT current_timestamp(),
   `fecha_ultimo_acceso` date DEFAULT NULL,
   `id_inscripcion` int(11) DEFAULT NULL,
   `id_leccion` int(11) DEFAULT NULL
-); 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `progreso`
 --
+
+INSERT INTO `progreso` (`id_progreso`, `puntuacion`, `fecha_inicio`, `fecha_ultimo_acceso`, `id_inscripcion`, `id_leccion`) VALUES
+(6, 0, '2023-07-23', NULL, 4, 1),
+(7, 15, '2023-12-21', NULL, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -173,11 +230,16 @@ CREATE TABLE `usuario` (
   `email_usuario` varchar(50) NOT NULL,
   `contraseña_usuario` varchar(100) NOT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
+
+INSERT INTO `usuario` (`id_usuario`, `nombre_usuario`, `email_usuario`, `contraseña_usuario`, `creado_en`) VALUES
+(7, 'miller', 'kalednarino@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$KSEObh025XXWc2Ujw+3AaQ$qAdQ+2kmnEdlTHabUvE7t2mgttNqUOnbc+SLzU+OeRU', '2023-07-20 18:19:16'),
+(54731, 'jorgeEliasCalderon', 'jorgeEl@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$ipOeiPPbyrfJ1mN2zlAJVA$0HCunKDW8W+alQEJLRAwBFFB9ZMZBfRXQuTBO2pHdgw', '2023-07-24 01:37:13'),
+(55903, 'estebanGameplay', 'jose@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$4B4bXkBsaTYBZwleCw6brg$SI8uhTl0WCLplnnWyq46iQQlvcEOULerjMlJLMSAEVI', '2023-07-21 04:19:11');
 
 --
 -- Índices para tablas volcadas
@@ -312,13 +374,13 @@ ALTER TABLE `leccion`
 -- AUTO_INCREMENT de la tabla `progreso`
 --
 ALTER TABLE `progreso`
-  MODIFY `id_progreso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_progreso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
-ALTER TABLE usuario
-  MODIFY id_usuario int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `usuario`
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68718;
 
 --
 -- Restricciones para tablas volcadas
@@ -358,60 +420,8 @@ ALTER TABLE `leccion`
 ALTER TABLE `progreso`
   ADD CONSTRAINT `fk_inscripcion_progreso` FOREIGN KEY (`id_inscripcion`) REFERENCES `inscripcion` (`id_inscripcion`),
   ADD CONSTRAINT `fk_leccion_progreso` FOREIGN KEY (`id_leccion`) REFERENCES `leccion` (`id_leccion`);
+COMMIT;
 
-
--- Insersiones de datos 
-
-INSERT INTO `capitulo` (`id_capitulo`, `nombre_capitulo`, `duracion_capitulo`) VALUES
-(1, 'Formulario', 1),
-(2, 'Metadatos', 1);
-
-
-INSERT INTO `categoria` (`id_categoria`, `nombre_categoria`) VALUES
-(1, 'Diseño de Bases de datos'),
-(3, 'UX|UI'),
-(4, 'infraestructura'),
-(5, 'Ciberseguridad');
-
-
-INSERT INTO `curso` (`id_curso`, `nombre_curso`, `descripcion`, `n_horas`, `id_categoria`, `id_docente`, `creado_en`) VALUES
-(1, 'HTML', 'Aprende a crear paginas web, Estudia HTML!', 10, 3, 2, '2023-07-21 00:15:33');
-
-
-INSERT INTO `docente` (`id_docente`, `nombre_docente`, `id_especializacion`) VALUES
-(1, 'Jolhver', 2),
-(2, 'Miguel', 1),
-(3, 'Bermen', 2);
-
-
-INSERT INTO `especializacion` (`id_especializacion`, `nombre_especializacion`) VALUES
-(1, 'Frontend'),
-(2, 'Backend'),
-(3, 'DevOps');
-
-
-INSERT INTO `estado_leccion` (`id_estado`, `nombre_estado`) VALUES
-(1, 'Completada'),
-(2, 'Incompleta'),
-(3, 'No iniciada');
-
-
-INSERT INTO `inscripcion` (`id_inscripcion`, `id_usuario`, `id_curso`, `inscrito_en`) VALUES
-(1, 7, 1, '2023-07-21 01:27:50'),
-(2, 55903, 1, '2023-07-21 04:22:55'),
-(4, 54731, 1, '2023-07-24 01:49:36');
-
-INSERT INTO `leccion` (`id_leccion`, `nombre_leccion`, `descripcion`, `duracion`, `id_estado_leccion`, `id_curso`, `id_capitulo`) VALUES
-(1, 'Inputs', 'Creacion de entradas de texto y sus caracteristicas', 40, 2, 1, 1),
-(2, 'Meta', 'Diferentes tipos y utilidades', 30, 2, 1, 2),
-(3, 'Redireccionamiento', 'Enviar formularios por los distintos metodos HTTP', 40, 1, 1, 1);
-
-
-INSERT INTO `progreso` (`id_progreso`, `puntuacion`, `fecha_inicio`, `fecha_ultimo_acceso`, `id_inscripcion`, `id_leccion`) VALUES
-(6, 0, '2023-07-23', NULL, 4, 1);
-
-
-INSERT INTO `usuario` (`id_usuario`, `nombre_usuario`, `email_usuario`, `contraseña_usuario`, `creado_en`) VALUES
-(7, 'miller', 'kalednarino@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$KSEObh025XXWc2Ujw+3AaQ$qAdQ+2kmnEdlTHabUvE7t2mgttNqUOnbc+SLzU+OeRU', '2023-07-20 18:19:16'),
-(54731, 'jorgeEliasCalderon', 'jorgeEl@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$ipOeiPPbyrfJ1mN2zlAJVA$0HCunKDW8W+alQEJLRAwBFFB9ZMZBfRXQuTBO2pHdgw', '2023-07-24 01:37:13'),
-(55903, 'estebanGameplay', 'jose@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$4B4bXkBsaTYBZwleCw6brg$SI8uhTl0WCLplnnWyq46iQQlvcEOULerjMlJLMSAEVI', '2023-07-21 04:19:11');
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
