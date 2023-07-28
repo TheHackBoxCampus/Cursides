@@ -453,12 +453,26 @@ manipular las cookies enviadas por el cliente
 
 ## Funcionamiento de la aplicación 
 
+Todas las rutas dependen de la siguiente ruta: ``/api_cursides``
+```
+Formato para la consulta HTTP: http://${hostname}:${port}/api_cursides/${ruta} 
+
+hostname = El hostname con el que configuraste el servidor
+port: El puerto donde esta en escucha el servidor
+ruta: Endpoint donde se hace la peticion
+
+// consulta tu archivo .env
+```
+### Endpoints: 
+
 1 Ruta ``/ingresar/:usuario/:contraseña``
 
-Para este punto de acceso necesitaras ingresar 2 parametros en la URL
+- Este endpoint permite autenticarte para utilizar los demas puntos de acceso
+- Para este punto de acceso necesitaras ingresar 2 parametros en la URL
 
 ```json
-POST => /ingresar/estebanGameplay/jose12354
+TEST USER => /ingresar/estebanGameplay/jose12354
+POST => /ingresar/{USER}/{PASSWORD}
 ```
 
 - ! Este usuario ``estebanGameplay/jose12354`` esta registrado. Puedes utilizar y probar las otras consultas con el.
@@ -479,7 +493,7 @@ POST => /ingresar/estebanGameplay/jose12354
 Para este punto de acceso necesitaras ingresar 3 parametros en las URL 
 
 ```json 
-POST => /registro/``param``/``param``/``param``
+POST => /registro/``usuario``/``clave``/``correo``
 ```
 - Una vez realizado el registro puedes utilizar los otros puntos de acceso.
 
@@ -488,6 +502,9 @@ POST => /registro/``param``/``param``/``param``
 - No utilizar caracteres especiales
 - No utilizar consultas SQL
 - No utilzar sentencias fuera de lo esperado
+- En el parametro ``correo`` debes colocar un String con la estructura de un correo electronico 
+ ``name@example.com``, Cualquier otro resultado sin los caracteres ``@`` y ``.`` te dara una excepcion
+- Los campos ``usuario`` y ``clave`` en su longitud deben tenes mas de 8 caracteres
 
 ** En caso contrario recibiras excepciones.**
 
@@ -520,7 +537,7 @@ POST => /inscripcion/1 || 2 || 3 ....
 - No utilizar caracteres especiales
 - No utilizar consultas SQL
 - No utilzar sentencias fuera de lo esperado
-- Enviar parametros de tipo NUMBER
+- Enviar parametros de tipo ``NUMBER``
 
 ** En caso contrario recibiras excepciones.**
 
@@ -560,12 +577,12 @@ Lista los docentes y su cantidad de especializaciones.
 
 -------------------------------------------------------------------------------------------------------------------
 
-8 Ruta ``/lecciones_capitulo``
+8 Ruta ``/estado_lecciones``
 
 Para este punto de acceso NO necesitaras enviar datos
 
 ```json
-GET => /lecciones_capitulo
+GET => /estado_lecciones
 ```
 Obtiene el progreso de un usuario en un curso (el estado de las lecciones)
 
